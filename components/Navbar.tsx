@@ -12,6 +12,8 @@ import {
   ChevronRight,
   Truck,
   ShieldCheck,
+  Video,
+  Palette,
 } from "lucide-react"
 import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { Separator } from "@/components/ui/separator"
@@ -129,168 +131,120 @@ const Navbar = () => {
                         alt="Cevonne"
                         className="h-5 w-auto object-contain brightness-0 transition-opacity group-hover:opacity-80"
                       />
-                      <span className="text-[9px] font-semibold tracking-[0.26em] text-neutral-400 uppercase mt-1">
-                        Haute Beauté · Paris &amp; New York
-                      </span>
                     </Link>
                   </div>
 
-                  {/* Minimalist Search inside drawer */}
+                  {/* Clean Search Input */}
                   <form onSubmit={handleMenuSearch} className="relative mt-4">
                     <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-neutral-400" />
                     <input
                       type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="Search shades, formulas, finishes..."
-                      className="w-full rounded-xl bg-neutral-50 hover:bg-neutral-100/70 focus:bg-white border border-neutral-200/80 focus:border-neutral-900 pl-9 pr-3 py-2 text-xs text-neutral-900 placeholder:text-neutral-400 focus:outline-none transition-all"
+                      placeholder="Search shades, products..."
+                      className="w-full rounded-full bg-neutral-100/70 focus:bg-white border border-neutral-200/80 focus:border-black pl-9 pr-3 py-2 text-xs text-neutral-900 placeholder:text-neutral-400 focus:outline-none transition-all"
                     />
                   </form>
                 </div>
 
-                {/* Center Scrollable Nav: Curated Categories & AR Studio */}
+                {/* Center Scrollable Nav: Clean Luxury Categories & Services */}
                 <div className="flex-1 overflow-y-auto px-6 py-4 space-y-6 scrollbar-none">
-                  {/* Category Section */}
+                  {/* Category Links */}
                   <div>
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-[10px] font-semibold tracking-[0.2em] text-neutral-400 uppercase">
-                        Collections
-                      </span>
-                      <span className="text-[10px] font-medium text-neutral-400">Pure Vegan</span>
-                    </div>
+                    <span className="text-[10px] font-semibold tracking-[0.2em] text-neutral-400 uppercase block mb-2">
+                      Collections
+                    </span>
 
-                    <nav className="space-y-1">
-                      {/* Shop All */}
+                    <nav className="divide-y divide-neutral-100">
                       <Link
                         to="/collections/everyday-essentials"
                         onClick={() => setMenuOpen(false)}
-                        className="group flex items-center justify-between py-2.5 px-2 -mx-2 rounded-xl hover:bg-neutral-50 transition-colors"
+                        className="flex items-center justify-between py-3 text-sm font-serif tracking-wide text-neutral-900 hover:text-neutral-600 transition-colors"
                       >
-                        <div>
-                          <div className="text-base font-serif font-medium tracking-wide text-neutral-900 group-hover:text-[var(--primary)] transition-colors">
-                            {t("nav.shopAll")}
-                          </div>
-                          <div className="text-[11px] text-neutral-400 font-sans">
-                            Explore all formulas &amp; curated collections
-                          </div>
-                        </div>
-                        <ChevronRight className="h-4 w-4 text-neutral-300 group-hover:text-neutral-900 group-hover:translate-x-0.5 transition-all" />
+                        <span>{t("nav.shopAll")}</span>
+                        <ChevronRight className="h-4 w-4 text-neutral-300" />
                       </Link>
 
-                      {/* Lip Color (Bestseller) */}
                       <Link
                         to="/collections/lip-color"
                         onClick={() => setMenuOpen(false)}
-                        className="group flex items-center justify-between py-2.5 px-2 -mx-2 rounded-xl hover:bg-neutral-50 transition-colors"
+                        className="flex items-center justify-between py-3 text-sm font-serif tracking-wide text-neutral-900 hover:text-neutral-600 transition-colors"
                       >
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <span className="text-base font-serif font-medium tracking-wide text-neutral-900 group-hover:text-[var(--primary)] transition-colors">
-                              {t("nav.lips")}
-                            </span>
-                            <span className="rounded-full bg-rose-50 px-2 py-0.5 text-[9px] font-semibold text-rose-700 border border-rose-200/60 uppercase tracking-wider">
-                              Bestseller
-                            </span>
-                          </div>
-                          <div className="text-[11px] text-neutral-400 font-sans">
-                            Velvet matte, weightless 12-hour pigment
-                          </div>
-                        </div>
-                        <ChevronRight className="h-4 w-4 text-neutral-300 group-hover:text-neutral-900 group-hover:translate-x-0.5 transition-all" />
+                        <span>{t("nav.lips")}</span>
+                        <ChevronRight className="h-4 w-4 text-neutral-300" />
                       </Link>
 
-                      {/* Face */}
                       <Link
-                        to="/search"
+                        to="/collections/new-arrival"
                         onClick={() => setMenuOpen(false)}
-                        className="group flex items-center justify-between py-2.5 px-2 -mx-2 rounded-xl hover:bg-neutral-50 transition-colors"
+                        className="flex items-center justify-between py-3 text-sm font-serif tracking-wide text-neutral-900 hover:text-neutral-600 transition-colors"
                       >
-                        <div>
-                          <div className="text-base font-serif font-medium tracking-wide text-neutral-900 group-hover:text-[var(--primary)] transition-colors">
-                            {t("nav.face")}
-                          </div>
-                          <div className="text-[11px] text-neutral-400 font-sans">
-                            Radiant coverage &amp; luminous complexion
-                          </div>
-                        </div>
-                        <ChevronRight className="h-4 w-4 text-neutral-300 group-hover:text-neutral-900 group-hover:translate-x-0.5 transition-all" />
+                        <span>New Arrivals</span>
+                        <ChevronRight className="h-4 w-4 text-neutral-300" />
                       </Link>
 
-                      {/* Eyes */}
                       <Link
-                        to="/search"
+                        to="/collections/the-campaign"
                         onClick={() => setMenuOpen(false)}
-                        className="group flex items-center justify-between py-2.5 px-2 -mx-2 rounded-xl hover:bg-neutral-50 transition-colors"
+                        className="flex items-center justify-between py-3 text-sm font-serif tracking-wide text-neutral-900 hover:text-neutral-600 transition-colors"
                       >
-                        <div>
-                          <div className="text-base font-serif font-medium tracking-wide text-neutral-900 group-hover:text-[var(--primary)] transition-colors">
-                            {t("nav.eyes")}
-                          </div>
-                          <div className="text-[11px] text-neutral-400 font-sans">
-                            Ultra-precision liners &amp; intense drama
-                          </div>
-                        </div>
-                        <ChevronRight className="h-4 w-4 text-neutral-300 group-hover:text-neutral-900 group-hover:translate-x-0.5 transition-all" />
+                        <span>The Campaign</span>
+                        <ChevronRight className="h-4 w-4 text-neutral-300" />
+                      </Link>
+
+                      <Link
+                        to="/collections/matte-essentials"
+                        onClick={() => setMenuOpen(false)}
+                        className="flex items-center justify-between py-3 text-sm font-serif tracking-wide text-neutral-900 hover:text-neutral-600 transition-colors"
+                      >
+                        <span>Matte Essentials</span>
+                        <ChevronRight className="h-4 w-4 text-neutral-300" />
                       </Link>
                     </nav>
                   </div>
 
-                  {/* Shade Finder Match Quiz Banner */}
+                  {/* Digital Services (Virtual Try-On & Shade Finder) - Clean Luxury Tiles */}
                   <div>
-                    <Link
-                      to="/quiz"
-                      onClick={() => setMenuOpen(false)}
-                      className="group relative block overflow-hidden rounded-2xl bg-gradient-to-br from-[#2a0e2a] via-[#4b0d4b] to-neutral-900 p-4 text-white shadow-md transition-all hover:shadow-lg hover:scale-[1.01]"
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="inline-flex items-center rounded-full bg-white/15 backdrop-blur-md px-2.5 py-1 text-[9px] font-semibold uppercase tracking-wider text-rose-200 border border-white/20">
-                          Shade Finder Quiz
-                        </span>
-                        <span className="text-[11px] font-medium text-rose-200 group-hover:text-white transition-colors">
-                          30 Sec &rarr;
-                        </span>
-                      </div>
-                      <div className="mt-3">
-                        <h4 className="text-base font-serif font-semibold tracking-wide text-white">
-                          Find Your Signature Shade
-                        </h4>
-                        <p className="mt-1 text-xs text-neutral-300 leading-relaxed font-sans">
-                          Take our 4-question match quiz &amp; unlock a 10% VIP gift.
-                        </p>
-                      </div>
-                    </Link>
-                  </div>
+                    <span className="text-[10px] font-semibold tracking-[0.2em] text-neutral-400 uppercase block mb-2.5">
+                      Services
+                    </span>
+                    <div className="grid grid-cols-2 gap-2.5">
+                      <Link
+                        to="/ar/lipstick"
+                        onClick={() => setMenuOpen(false)}
+                        className="flex flex-col justify-between rounded-xl border border-neutral-200 bg-neutral-50/60 p-3 hover:bg-neutral-100/70 hover:border-neutral-300 transition-all group"
+                      >
+                        <div className="flex items-center justify-between w-full">
+                          <Video className="h-4 w-4 text-neutral-700 group-hover:text-black transition-colors" />
+                          <span className="text-[9px] font-semibold tracking-wider text-rose-600 uppercase">AR</span>
+                        </div>
+                        <div className="mt-3">
+                          <div className="text-xs font-medium text-neutral-900">{t("nav.virtualTryOn")}</div>
+                          <div className="text-[10px] text-neutral-500">Live Camera Studio</div>
+                        </div>
+                      </Link>
 
-                  {/* High-Fashion AR Try-On Banner */}
-                  <div>
-                    <Link
-                      to="/ar/lipstick"
-                      onClick={() => setMenuOpen(false)}
-                      className="group relative block overflow-hidden rounded-2xl bg-gradient-to-br from-neutral-950 via-[#340b3b] to-neutral-900 p-4 text-white shadow-md transition-all hover:shadow-lg hover:scale-[1.01]"
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="inline-flex items-center rounded-full bg-white/15 backdrop-blur-md px-2.5 py-1 text-[9px] font-semibold uppercase tracking-wider text-neutral-200 border border-white/20">
-                          Virtual AR Studio
-                        </span>
-                        <span className="text-[11px] font-medium text-white/80 group-hover:text-white transition-colors">
-                          Try Live &rarr;
-                        </span>
-                      </div>
-                      <div className="mt-3">
-                        <h4 className="text-base font-serif font-semibold tracking-wide text-white">
-                          {t("nav.virtualTryOn")}
-                        </h4>
-                        <p className="mt-1 text-xs text-neutral-300 leading-relaxed font-sans">
-                          Test every shade live on your lips with our high-definition AR camera.
-                        </p>
-                      </div>
-                    </Link>
+                      <Link
+                        to="/quiz"
+                        onClick={() => setMenuOpen(false)}
+                        className="flex flex-col justify-between rounded-xl border border-neutral-200 bg-neutral-50/60 p-3 hover:bg-neutral-100/70 hover:border-neutral-300 transition-all group"
+                      >
+                        <div className="flex items-center justify-between w-full">
+                          <Palette className="h-4 w-4 text-neutral-700 group-hover:text-black transition-colors" />
+                          <span className="text-[9px] font-semibold tracking-wider text-neutral-400 uppercase">Quiz</span>
+                        </div>
+                        <div className="mt-3">
+                          <div className="text-xs font-medium text-neutral-900">Shade Finder</div>
+                          <div className="text-[10px] text-neutral-500">Find Your Match</div>
+                        </div>
+                      </Link>
+                    </div>
                   </div>
 
                   {/* Brand & Editorial */}
                   <div className="pt-1">
                     <span className="text-[10px] font-semibold tracking-[0.2em] text-neutral-400 uppercase">
-                      The Brand
+                      The Maison
                     </span>
                     <nav className="mt-2 space-y-1">
                       <Link
@@ -299,64 +253,32 @@ const Navbar = () => {
                         className="group flex items-center justify-between py-2 text-sm text-neutral-700 hover:text-neutral-950 transition-colors"
                       >
                         <span className="font-serif font-medium">{t("nav.aboutUs")}</span>
-                        <span className="text-xs text-neutral-400 group-hover:text-neutral-600">Our Story &rarr;</span>
+                        <ChevronRight className="h-4 w-4 text-neutral-300 group-hover:text-neutral-900 transition-colors" />
                       </Link>
                     </nav>
                   </div>
 
-                  {/* Quick User Utilities: Account & Wishlist */}
-                  <div className="grid grid-cols-2 gap-2 pt-1">
-                    <Link
-                      to={isAuthenticated ? "/profile" : "/login"}
-                      onClick={() => setMenuOpen(false)}
-                      className="flex items-center justify-center gap-2 rounded-xl border border-neutral-200/80 bg-neutral-50/70 py-2.5 px-3 text-xs font-medium text-neutral-800 hover:bg-neutral-100 transition-colors"
-                    >
-                      <User className="h-3.5 w-3.5 text-neutral-600" />
-                      <span>{isAuthenticated ? "My Profile" : "Sign In"}</span>
-                    </Link>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setMenuOpen(false)
-                        openDrawer("wishlist")
-                      }}
-                      className="flex items-center justify-center gap-2 rounded-xl border border-neutral-200/80 bg-neutral-50/70 py-2.5 px-3 text-xs font-medium text-neutral-800 hover:bg-neutral-100 transition-colors"
-                    >
-                      <Heart className="h-3.5 w-3.5 text-neutral-600" />
-                      <span>Wishlist {mounted && wishlist.length > 0 && `(${wishlist.length})`}</span>
-                    </button>
-                  </div>
+
                 </div>
 
                 {/* Bottom Section: Concierge & Brand Assurance */}
-                <div className="border-t border-neutral-100 bg-neutral-50/60 p-5 space-y-3">
+                <div className="border-t border-neutral-100 bg-neutral-50/60 p-4 space-y-2.5">
                   <a
                     href="https://wa.me/917061009669?text=Hi%20Cevonne,%20I%20would%20like%20assistance%20with%20choosing%20a%20shade."
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-between rounded-xl bg-white border border-neutral-200/80 px-3.5 py-2.5 shadow-2xs hover:border-neutral-300 transition-all"
+                    className="flex items-center justify-between rounded-xl bg-white border border-neutral-200/80 px-3.5 py-2 shadow-2xs hover:border-neutral-300 transition-all text-neutral-800"
                   >
-                    <div className="flex items-center gap-2.5">
-                      <div className="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
-                        <Phone className="h-3.5 w-3.5" />
-                      </div>
-                      <div>
-                        <div className="text-xs font-semibold text-neutral-900">Shade Concierge</div>
-                        <div className="text-[10px] text-neutral-500">Chat with a beauty advisor on WhatsApp</div>
-                      </div>
+                    <div className="flex items-center gap-2">
+                      <Phone className="h-3.5 w-3.5 text-neutral-500" />
+                      <span className="text-xs font-medium">Beauty Advisor · WhatsApp</span>
                     </div>
                     <ChevronRight className="h-3.5 w-3.5 text-neutral-400" />
                   </a>
 
-                  <div className="flex items-center justify-between text-[10px] text-neutral-500 pt-1">
-                    <span className="flex items-center gap-1">
-                      <Truck className="h-3 w-3 text-neutral-400" />
-                      Free Delivery &gt; ₹999
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <ShieldCheck className="h-3 w-3 text-neutral-400" />
-                      100% Cruelty-Free
-                    </span>
+                  <div className="flex items-center justify-between text-[10px] text-neutral-400 px-1 pt-1">
+                    <span>Complimentary Shipping &gt; ₹999</span>
+                    <span>100% Cruelty-Free</span>
                   </div>
                 </div>
               </SheetContent>

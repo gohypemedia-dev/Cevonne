@@ -23,6 +23,17 @@ import {
 import { useShop } from "@/context/ShopContext";
 import { AR_STATIC_SHADES, type ArShade } from "@/data/arShades";
 
+const getShadeProductImage = (shade?: ArShade | null) => {
+  if (!shade) return "https://cdn.cevonne.com/products/product8.png";
+  if (shade.productLine === "Liquid" || shade.category?.includes("Liquid") || shade.category?.includes("Air")) {
+    return "https://cdn.cevonne.com/products/product4.png";
+  }
+  if (shade.productLine === "Gloss" || shade.category?.includes("Gloss") || shade.category?.includes("Glass")) {
+    return "https://cdn.cevonne.com/products/product3.png";
+  }
+  return "https://cdn.cevonne.com/products/product8.png";
+};
+
 // Quiz Option Types
 type SkinToneOption = {
   id: string;
@@ -379,7 +390,7 @@ export default function ShadeQuizPage() {
       quantity: 1,
       stock: 50,
       currency: "₹",
-      image: "https://cdn.cevonne.com/assets/images/product1.png",
+      image: getShadeProductImage(matchedShade.hero),
     };
 
     addToCart(item);
@@ -477,9 +488,9 @@ export default function ShadeQuizPage() {
           </div>
         )}
 
-        {/* PROGRESS BAR (Shown during Questions 1-4) */}
+        {/* NAVIGATION BAR (Shown during Questions 1-4) */}
         {step >= 1 && step <= 4 && (
-          <div className="mb-8 space-y-3">
+          <div className="mb-8">
             <div className="flex items-center justify-between text-xs">
               <button
                 type="button"
@@ -492,12 +503,6 @@ export default function ShadeQuizPage() {
                 Question {step} of 4
               </span>
             </div>
-            <div className="h-1.5 w-full overflow-hidden rounded-full bg-neutral-200">
-              <div
-                className="h-full bg-neutral-900 transition-all duration-300"
-                style={{ width: `${(step / 4) * 100}%` }}
-              />
-            </div>
           </div>
         )}
 
@@ -505,9 +510,6 @@ export default function ShadeQuizPage() {
         {step === 1 && (
           <div className="space-y-6 animate-fade-in">
             <div className="text-center space-y-2">
-              <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#9c897f]">
-                Step 01
-              </span>
               <h2 className="font-serif text-2xl sm:text-3xl font-normal text-neutral-900">
                 What is your skin complexion?
               </h2>
@@ -546,9 +548,6 @@ export default function ShadeQuizPage() {
         {step === 2 && (
           <div className="space-y-6 animate-fade-in">
             <div className="text-center space-y-2">
-              <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#9c897f]">
-                Step 02
-              </span>
               <h2 className="font-serif text-2xl sm:text-3xl font-normal text-neutral-900">
                 What is your undertone?
               </h2>
@@ -592,9 +591,6 @@ export default function ShadeQuizPage() {
         {step === 3 && (
           <div className="space-y-6 animate-fade-in">
             <div className="text-center space-y-2">
-              <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#9c897f]">
-                Step 03
-              </span>
               <h2 className="font-serif text-2xl sm:text-3xl font-normal text-neutral-900">
                 Choose your desired finish &amp; texture
               </h2>
@@ -633,9 +629,6 @@ export default function ShadeQuizPage() {
         {step === 4 && (
           <div className="space-y-6 animate-fade-in">
             <div className="text-center space-y-2">
-              <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#9c897f]">
-                Step 04
-              </span>
               <h2 className="font-serif text-2xl sm:text-3xl font-normal text-neutral-900">
                 What is your signature vibe?
               </h2>
@@ -703,17 +696,27 @@ export default function ShadeQuizPage() {
               <div className="absolute top-0 right-0 h-40 w-40 bg-radial from-rose-100/50 to-transparent pointer-events-none rounded-bl-full" />
 
               <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
-                {/* Big Swatch Indicator */}
-                <div className="relative shrink-0 text-center">
-                  <div
-                    className="h-28 w-28 sm:h-32 sm:w-32 rounded-full shadow-2xl border-4 border-white ring-1 ring-black/10 flex items-center justify-center mx-auto"
-                    style={{ backgroundColor: matchedShade.hero.color }}
-                  >
-                    <div className="h-12 w-12 rounded-full bg-white/20 backdrop-blur-xs flex items-center justify-center text-white text-xs font-serif font-bold drop-shadow-md">
+                {/* Real Product Image & Shade Swatch Showcase */}
+                <div className="relative shrink-0 text-center mx-auto sm:mx-0">
+                  <div className="relative h-36 w-36 sm:h-44 sm:w-44 rounded-2xl border border-neutral-200/90 bg-neutral-50/80 p-3 shadow-md overflow-hidden flex items-center justify-center group">
+                    {/* Real Lipstick Product Packshot */}
+                    <img
+                      src={getShadeProductImage(matchedShade.hero)}
+                      alt={matchedShade.hero.name}
+                      className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-105"
+                    />
+
+                    {/* Shade Color Swatch Badge Overlay */}
+                    <div
+                      className="absolute bottom-2.5 right-2.5 h-9 w-9 rounded-full shadow-lg border-2 border-white ring-1 ring-black/10 flex items-center justify-center text-white text-[10px] font-bold drop-shadow-xs"
+                      style={{ backgroundColor: matchedShade.hero.color }}
+                      title={`Shade #${matchedShade.hero.code || matchedShade.hero.id}`}
+                    >
                       #{matchedShade.hero.code || matchedShade.hero.id}
                     </div>
                   </div>
-                  <span className="inline-block mt-3 text-[10px] font-semibold text-neutral-400 uppercase tracking-widest">
+
+                  <span className="inline-block mt-2 text-[10px] font-semibold text-neutral-400 uppercase tracking-widest">
                     Pantone {matchedShade.hero.pantone || "Couture"}
                   </span>
                 </div>
@@ -766,10 +769,17 @@ export default function ShadeQuizPage() {
             {/* SISTER SHADE / SECOND CHOICE */}
             <div className="rounded-2xl border border-neutral-200 bg-neutral-50/80 p-5 flex items-center justify-between gap-4">
               <div className="flex items-center gap-3.5">
-                <div
-                  className="h-10 w-10 rounded-full shrink-0 shadow-sm border-2 border-white ring-1 ring-black/10"
-                  style={{ backgroundColor: matchedShade.sister.color }}
-                />
+                <div className="relative h-12 w-12 rounded-xl border border-neutral-200 bg-white p-1 overflow-hidden shrink-0 shadow-xs">
+                  <img
+                    src={getShadeProductImage(matchedShade.sister)}
+                    alt={matchedShade.sister.name}
+                    className="h-full w-full object-contain"
+                  />
+                  <div
+                    className="absolute -bottom-0.5 -right-0.5 h-4 w-4 rounded-full border border-white shadow-xs"
+                    style={{ backgroundColor: matchedShade.sister.color }}
+                  />
+                </div>
                 <div>
                   <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider block">
                     Alternative Sister Match
