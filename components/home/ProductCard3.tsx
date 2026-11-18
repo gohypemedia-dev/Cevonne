@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Heart, Video, ChevronLeft, ChevronRight } from "lucide-react";
-import { Link } from "@/lib/router";
+import { Link, useNavigate } from "@/lib/router";
 import { useShop } from "@/context/ShopContext";
+import { API_BASE } from "@/lib/api";
 import { toast } from "sonner";
 
 import { useProductsCatalog } from "@/hooks/useProductsCatalog";
@@ -52,16 +53,39 @@ const INITIAL_VISIBLE = 4;
 
 const ProductCard3 = () => {
   const [expanded, setExpanded] = useState(false);
+  const navigate = useNavigate();
   const { products: list, loading } = useProductsCatalog();
   const { wishlist, toggleWishlist, openDrawer } = useShop();
 
-  const products = useMemo<ProductCardItem[]>(
-    () =>
-      Array.isArray(list)
-        ? list.map(mapProduct).filter((product): product is ProductCardItem => Boolean(product))
-        : [],
-    [list]
-  );
+  const [collectionProducts, setCollectionProducts] = useState<any[]>([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    const fetchTrending = async () => {
+      try {
+        const res = await fetch(`${API_BASE}/collections/the-campaign`);
+        if (res.ok) {
+          const data = await res.json();
+          if (!cancelled && Array.isArray(data?.products) && data.products.length > 0) {
+            setCollectionProducts(data.products);
+          }
+        }
+      } catch (err) {
+        console.error("Error loading trending collection:", err);
+      }
+    };
+    fetchTrending();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const products = useMemo<ProductCardItem[]>(() => {
+    const sourceList = collectionProducts.length > 0 ? collectionProducts : (Array.isArray(list) ? list.slice(4) : []);
+    return Array.isArray(sourceList)
+      ? sourceList.map(mapProduct).filter((product): product is ProductCardItem => Boolean(product))
+      : [];
+  }, [collectionProducts, list]);
 
   const visible = expanded ? products : products.slice(0, INITIAL_VISIBLE);
 
@@ -69,10 +93,10 @@ const ProductCard3 = () => {
     <section className="w-full bg-white px-0 py-10">
       <div className="mx-auto mb-8 max-w-2xl px-4 text-center sm:mb-10">
         <h2 className="font-sans text-[26px] font-normal leading-tight tracking-tight text-neutral-950 sm:text-[32px]">
-          Explore Cevonne&apos;s Beauty Essentials
+          Trending &amp; Most Loved
         </h2>
         <p className="mx-auto mt-3 max-w-xl text-sm font-normal leading-relaxed text-neutral-500 sm:text-[15px]">
-          Discover effortless color and care, crafted to become part of your everyday ritual.
+          Our most coveted, cult-favorite shades and iconic bestsellers.
         </p>
       </div>
 
@@ -104,6 +128,12 @@ const ProductCard3 = () => {
             }
           };
 
+          const handleVirtualTryOn = (e: React.MouseEvent) => {
+            e.preventDefault();
+            e.stopPropagation();
+            navigate("/ar/lipstick");
+          };
+
           return (
             <div
               key={product.id || product.slug || i}
@@ -122,13 +152,16 @@ const ProductCard3 = () => {
                 to={`/product/${product.slug || product.id}`}
                 className="relative z-10 flex h-full flex-col"
               >
-                {/* Top row */}
-                <div className="absolute left-2 top-2 flex items-center gap-2 text-xs font-medium text-black">
-                  <span className="flex items-center gap-1 px-2 py-1 text-[11px] rounded-full">
-                    <Video className="h-4 w-4" />
-                    Virtual Try On
-                  </span>
-                </div>
+                {/* Virtual Try On Button */}
+                <button
+                  type="button"
+                  aria-label="Open Virtual Try On in AR"
+                  className="absolute left-2 top-2 z-20 flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-medium text-neutral-900 bg-white/80 hover:bg-white active:scale-95 backdrop-blur-sm rounded-full shadow-xs border border-black/5 hover:border-black/20 transition-all cursor-pointer group/vto"
+                  onClick={handleVirtualTryOn}
+                >
+                  <Video className="h-3.5 w-3.5 text-neutral-800 group-hover/vto:text-rose-600 transition-colors" />
+                  <span>Virtual Try On</span>
+                </button>
 
                 {/* Wishlist (kept as a separate button, not inside Link for a11y) */}
                 <button
