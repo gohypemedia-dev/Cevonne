@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
-import fallbackProducts from "@/data/cevonneProducts";
 import { API_BASE, HAS_API_BASE } from "@/lib/api";
 import type { Product } from "@/types/product";
-
-const initialProducts = (fallbackProducts || []) as Product[];
 
 const cache = {
   data: null as Product[] | null,
@@ -18,12 +15,29 @@ const normalizeItems = (payload: unknown): Product[] => {
 };
 
 export function useProductsCatalog() {
-  const [products, setProducts] = useState<Product[]>(() => cache.data || initialProducts);
-  const [loading, setLoading] = useState(Boolean(!cache.data && !initialProducts.length));
+  const [products, setProducts] = useState<Product[]>(() => cache.data || []);
+  const [loading, setLoading] = useState<boolean>(() => !cache.data || cache.data.length === 0);
   const [error, setError] = useState<string>(cache.error || "");
 
   useEffect(() => {
     let cancelled = false;
+
+    // Check client sessionStorage on mount if cache.data is empty
+    if (!cache.data && typeof window !== "undefined") {
+      try {
+        const stored = sessionStorage.getItem("cevonne_catalog_cache");
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            cache.data = parsed;
+            if (!cancelled) {
+              setProducts(parsed);
+              setLoading(false);
+            }
+          }
+        }
+      } catch {}
+    }
 
     if (cache.hasFetched && cache.data) {
       setLoading(false);
@@ -55,6 +69,11 @@ export function useProductsCatalog() {
         const items = normalizeItems(payload);
         if (items.length > 0) {
           cache.data = items;
+          if (typeof window !== "undefined") {
+            try {
+              sessionStorage.setItem("cevonne_catalog_cache", JSON.stringify(items));
+            } catch {}
+          }
         }
         cache.hasFetched = true;
         cache.error = null;
