@@ -21,14 +21,43 @@ import { useShop } from "@/context/ShopContext"
 import { useAuth } from "@/context/AuthContext"
 import { useLanguage } from "@/context/LanguageContext"
 import { STATIC_ASSETS } from "@/lib/assets"
+import { API_BASE } from "@/lib/api"
 
 const NAV_H_MOBILE = "h-16"     // 64px
 const NAV_H_DESKTOP = "md:h-20" // 80px
+
+const DEFAULT_COLLECTIONS = [
+  { name: "Everyday Essentials", slug: "everyday-essentials" },
+  { name: "New Arrival", slug: "new-arrival" },
+  { name: "The Campaign", slug: "the-campaign" },
+  { name: "Lip Color", slug: "lip-color" },
+  { name: "Lip Care", slug: "lip-care" },
+  { name: "Lip Gloss", slug: "lip-gloss" },
+  { name: "Matte Essentials", slug: "matte-essentials" },
+  { name: "Satin Finish", slug: "satin-finish" },
+];
 
 const Navbar = () => {
   const [mounted, setMounted] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
+  const [navCollections, setNavCollections] = useState(DEFAULT_COLLECTIONS)
+
+  useEffect(() => {
+    let cancelled = false
+    fetch(`${API_BASE}/collections`)
+      .then(async (res) => {
+        if (!res.ok) return
+        const data = await res.json()
+        if (!cancelled && Array.isArray(data) && data.length > 0) {
+          setNavCollections(data)
+        }
+      })
+      .catch(() => {})
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   const THRESHOLD = 24
   const location = useLocation()
@@ -149,57 +178,24 @@ const Navbar = () => {
 
                 {/* Center Scrollable Nav: Clean Luxury Categories & Services */}
                 <div className="flex-1 overflow-y-auto px-6 py-4 space-y-6 scrollbar-none">
-                  {/* Category Links */}
+                  {/* Category Links (All 8 Collections) */}
                   <div>
                     <span className="text-[10px] font-semibold tracking-[0.2em] text-neutral-400 uppercase block mb-2">
                       Collections
                     </span>
 
                     <nav className="divide-y divide-neutral-100">
-                      <Link
-                        to="/collections/everyday-essentials"
-                        onClick={() => setMenuOpen(false)}
-                        className="flex items-center justify-between py-3 text-sm font-serif tracking-wide text-neutral-900 hover:text-neutral-600 transition-colors"
-                      >
-                        <span>{t("nav.shopAll")}</span>
-                        <ChevronRight className="h-4 w-4 text-neutral-300" />
-                      </Link>
-
-                      <Link
-                        to="/collections/lip-color"
-                        onClick={() => setMenuOpen(false)}
-                        className="flex items-center justify-between py-3 text-sm font-serif tracking-wide text-neutral-900 hover:text-neutral-600 transition-colors"
-                      >
-                        <span>{t("nav.lips")}</span>
-                        <ChevronRight className="h-4 w-4 text-neutral-300" />
-                      </Link>
-
-                      <Link
-                        to="/collections/new-arrival"
-                        onClick={() => setMenuOpen(false)}
-                        className="flex items-center justify-between py-3 text-sm font-serif tracking-wide text-neutral-900 hover:text-neutral-600 transition-colors"
-                      >
-                        <span>New Arrivals</span>
-                        <ChevronRight className="h-4 w-4 text-neutral-300" />
-                      </Link>
-
-                      <Link
-                        to="/collections/the-campaign"
-                        onClick={() => setMenuOpen(false)}
-                        className="flex items-center justify-between py-3 text-sm font-serif tracking-wide text-neutral-900 hover:text-neutral-600 transition-colors"
-                      >
-                        <span>The Campaign</span>
-                        <ChevronRight className="h-4 w-4 text-neutral-300" />
-                      </Link>
-
-                      <Link
-                        to="/collections/matte-essentials"
-                        onClick={() => setMenuOpen(false)}
-                        className="flex items-center justify-between py-3 text-sm font-serif tracking-wide text-neutral-900 hover:text-neutral-600 transition-colors"
-                      >
-                        <span>Matte Essentials</span>
-                        <ChevronRight className="h-4 w-4 text-neutral-300" />
-                      </Link>
+                      {navCollections.map((col) => (
+                        <Link
+                          key={col.slug || col.name}
+                          to={`/collections/${encodeURIComponent(col.slug || col.name)}`}
+                          onClick={() => setMenuOpen(false)}
+                          className="flex items-center justify-between py-3 text-sm font-serif tracking-wide text-neutral-900 hover:text-neutral-600 transition-colors"
+                        >
+                          <span>{col.name}</span>
+                          <ChevronRight className="h-4 w-4 text-neutral-300" />
+                        </Link>
+                      ))}
                     </nav>
                   </div>
 
@@ -239,23 +235,6 @@ const Navbar = () => {
                         </div>
                       </Link>
                     </div>
-                  </div>
-
-                  {/* Brand & Editorial */}
-                  <div className="pt-1">
-                    <span className="text-[10px] font-semibold tracking-[0.2em] text-neutral-400 uppercase">
-                      The Maison
-                    </span>
-                    <nav className="mt-2 space-y-1">
-                      <Link
-                        to="/about"
-                        onClick={() => setMenuOpen(false)}
-                        className="group flex items-center justify-between py-2 text-sm text-neutral-700 hover:text-neutral-950 transition-colors"
-                      >
-                        <span className="font-serif font-medium">{t("nav.aboutUs")}</span>
-                        <ChevronRight className="h-4 w-4 text-neutral-300 group-hover:text-neutral-900 transition-colors" />
-                      </Link>
-                    </nav>
                   </div>
 
 
